@@ -1,4 +1,4 @@
- <h1 align="center" id="title">VirtualWallet [Wallee]</h1>
+ <h1 id="title">VirtualWallet [Wallee]</h1>
  
  <h2> Documentation </h2>
 *  <a href="UML_Wallet_00.svg">Diagrama de clase UML</a>
