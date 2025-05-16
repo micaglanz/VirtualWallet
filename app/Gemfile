@@ -1,0 +1,11 @@
+ruby '3.2.2'
+source 'https://rubygems.org'
+
+gem 'sinatra', '~> 4.1'
+gem 'puma', '~> 6.6'
+gem 'rackup'
+gem 'sinatra-contrib'           # Para el reloader
+gem 'sinatra-activerecord'      # Para ActiveRecord
+gem 'sqlite3'                   # Para la base de datos SQLite
+gem 'logger'                    # Logger integrado
+gem 'rake'                      # Herramienta para automatizar tareas en Ruby
