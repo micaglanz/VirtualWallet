@@ -32,7 +32,7 @@ docker compose exec app bundle exec rake db:create
 
 - El servicio estará inicializado en:
 
-[text](http://localhost:8000)
+(http://localhost:8000)
 
 ### 4. Acceder a la consola interactiva de Ruby
 
