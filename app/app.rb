@@ -3,24 +3,10 @@ require 'sinatra/base'
 require 'sinatra/reloader' if Sinatra::Base.environment == :development
 require 'sinatra/activerecord'
 require_relative 'models/user'
+require_relative 'models/account'
+require_relative 'models/transaction'
 require 'logger'
 require 'sinatra'
-
-
-
-
-class User < ActiveRecord::Base
-end
-
-class CreateUsers < ActiveRecord::Migration[7.0]
-  def change
-    create_table :users do |t|
-      t.string :name
-
-      t.timestamps
-    end
-  end
-end
 
 class App < Sinatra::Application
 
@@ -41,7 +27,7 @@ class App < Sinatra::Application
       logger.info 'Reloaded!!!'
     end
   end
-
+  
 end
 
 # Rutas de Sinatra

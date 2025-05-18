@@ -18,16 +18,16 @@ cd VirtualWallet
 
 ### 2. Construye y levanta los servicios
 
-```bash
-docker compose build
-```
-```bash
-docker compose up
-```
+- Si ya tenes uno corriendo
 
-### 3. Crea la base de datos
 ```bash
-docker compose exec app bundle exec rake db:create
+docker-compose down
+```
+```bash
+docker-compose build
+```
+```bash
+docker-compose up -d
 ```
 
 - El servicio estará inicializado en:
@@ -39,5 +39,11 @@ docker compose exec app bundle exec rake db:create
 - Para probar lógica o ejecutar código manualmente:
 
 ```bash
-docker compose exec app bundle exec irb -I. -r server.rb
+docker compose exec app bundle exec irb -I. -r app.rb
+```
+
+- Una vez acá carga el archivo test_data.rb
+
+```bash
+load './scripts/test_data.rb'
 ```

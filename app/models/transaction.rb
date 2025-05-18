@@ -1,48 +1,74 @@
 class Transaction < ActiveRecord::Base
-    
-    TRANSACTION_STATUS = {
-        pending:    'pending',
-        completed:  'completed',
-        failed:     'failed'
-    }
+  TRANSACTION_STATUS = {
+    pending:    'pending',
+    completed:  'completed',
+    failed:     'failed',
+  }
 
-    def pending?
-        status == TRANSACTION_STATUS[:pending]
+  before_create :set_status_pending
+
+  after_create :transfer_balance_and_update_status
+
+  # Relaciones y validaciones como antes
+  belongs_to :account, foreign_key: :source_cvu, primary_key: :cvu
+
+  validates :source_cvu, presence: true
+  validates :destination_cvu, presence: true
+  validates :amount, presence: true, numericality: { greater_than: 0 }
+  validates :details, presence: true
+  # Ya no validamos status porque es interno
+
+  validate :active_account
+
+  def pending?
+    status == TRANSACTION_STATUS[:pending]
+  end
+
+  def completed?
+    status == TRANSACTION_STATUS[:completed]
+  end
+
+  def failed?
+    status == TRANSACTION_STATUS[:failed]
+  end
+
+  private
+
+  def set_status_pending
+    self.status = TRANSACTION_STATUS[:pending]
+  end
+
+  def active_account
+    unless account&.status_active?
+      errors.add(:account, "debe estar activa para realizar transacciones")
     end
+  end
 
-    def completed?
-        status == TRANSACTION_STATUS[:completed]
+  def transfer_balance_and_update_status
+    source_account = Account.find_by(cvu: source_cvu)
+    target_account = Account.find_by(cvu: destination_cvu)
+
+    begin
+      ActiveRecord::Base.transaction do
+        source_account.balance -= amount
+        source_account.save!
+
+        target_account.balance += amount
+        target_account.save!
+      end
+      update_column(:status, TRANSACTION_STATUS[:completed])
+    rescue StandardError => e
+      update_column(:status, TRANSACTION_STATUS[:failed])
+      # Opcional: loguear el error
+      Rails.logger.error("Falló la transferencia: #{e.message}")
     end
+  end
 
-    def failed?
-        status == TRANSACTION_STATUS[:failed]
-    end
-
-    def cancelled?
-        status == TRANSACTION_STATUS[:cancelled]
-    end
-    
-    belongs_to :source_account, class_name: 'Account', foreign_key: 'source_cvu', primary_key: 'cvu'
-    belongs_to :destination_account, class_name: 'Account', foreign_key: 'destination_cvu', primary_key: 'cvu'
-    #Relationships
-
-    #Validations
-    validates :id, presence: true
-    validates :source_cvu, presence: true
-    validates :destination_cvu, presence: true
-    validates :amount, presence: true, numericality: { greater_than: 0 }
-    validates :date, presence: true
-    validates :details,
-    validates :status, presence: true, inclusion: { in: TRANSACTION_STATUS.values }
-
-    validate :active_account
-
-    private
-
-    def active_account
-        unless account&.status_active?
-        errors.add(:account, "debe estar activa para realizar transacciones")
-        end
-    end
+  # Método para actualizar status manualmente en caso de retraso en la transacción
+  public
+  def finalize_transaction(success:)
+    new_status = success ? TRANSACTION_STATUS[:completed] : TRANSACTION_STATUS[:failed]
+    update(status: new_status) if pending?
+  end
 
 end
