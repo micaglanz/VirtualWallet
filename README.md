@@ -32,6 +32,9 @@ docker-compose build
 ```bash
 docker-compose up -d
 ```
+```bash
+docker compose exec app bundle exec rake db:migrate
+```
 
 - El servicio estará inicializado en:
 

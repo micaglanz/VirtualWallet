@@ -15,6 +15,33 @@ RUN apk add --no-cache \
     git \
     curl
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Definir directorio de trabajo
+WORKDIR /app
+
+# Copiar Gemfile y hacer bundle install
+COPY Gemfile .
+RUN bundle install
+
+# Copiar los archivos de la app
+COPY . .
+
+# Crear la base de datos y las tablas si es necesario (si no está hecha)
+RUN bundle install
+
+# Exponer el puerto de la app
+EXPOSE 8000
+
+# Define el comando predeterminado para iniciar el contenedor:
+# - bundle exec: Ejecuta comandos en el contexto de las gemas instaladas.
+# - rackup: Inicia el servidor Rack.
+# - -o 0.0.0.0: Escucha en todas las interfaces de red.
+# - -p 8000: Usa el puerto 8000.
+# Busca automáticamente config.ru para iniciar la aplicación.
+=======
+=======
+>>>>>>> MatV
 WORKDIR /app
 
 # Copiar solo los archivos necesarios para instalar gems y aprovechar cache:
@@ -29,4 +56,8 @@ COPY . .
 # Puerto por defecto para rackup
 EXPOSE 8000
 
+<<<<<<< HEAD
+>>>>>>> MatV
+=======
+>>>>>>> MatV
 CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0", "-p", "8000"]
