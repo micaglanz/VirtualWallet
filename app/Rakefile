@@ -1,19 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-require "sinatra/activerecord/rake"
-=======
-=======
->>>>>>> MatV
+
 begin
   require 'sinatra/activerecord/rake'
 rescue LoadError => e
   puts "No se pudo cargar sinatra/activerecord/rake: #{e}"
 end
-
-<<<<<<< HEAD
->>>>>>> MatV
-=======
->>>>>>> MatV
 
 namespace :db do
   task :load_config do
