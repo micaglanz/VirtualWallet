@@ -13,7 +13,7 @@
 
 ```bash
 git clone https://github.com/usuario/VirtualWallet.git
-cd VirtualWallet
+cd app
 ```
 
 ### 2. Construye y levanta los servicios
@@ -23,6 +23,9 @@ cd VirtualWallet
 ```bash
 docker-compose down
 ```
+
+- Sino, segui desde estos pasos
+
 ```bash
 docker-compose build
 ```
