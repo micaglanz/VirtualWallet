@@ -1,14 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  background-color: #f2f2f2;
-=======
   background-color: #69645c; /* gris más apagado */
->>>>>>> MatV
-=======
-  background-color: #69645c; /* gris más apagado */
->>>>>>> MatV
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,14 +9,6 @@ body {
   margin: 0;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> MatV
-=======
-
->>>>>>> MatV
 h1 {
   margin-bottom: 30px;
 }

@@ -27,7 +27,7 @@ class App < Sinatra::Application
       logger.info 'Reloaded!!!'
     end
   end
-
+end
 
 # Rutas de Sinatra
 get '/' do

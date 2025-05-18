@@ -1,12 +1,6 @@
 # Modelo de ActiveRecord (ejemplo con una tabla `users`)
 # models/user.rb
 class User < ActiveRecord::Base
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> MatV
-   
     self.primary_key = 'dni'
 
     #Relationships
@@ -16,9 +10,4 @@ class User < ActiveRecord::Base
     validates :dni, presence: true, uniqueness: true
     validates :name, :surname, :address, :date_of_birth, presence: true
     validates :email, presence: true
-
-<<<<<<< HEAD
->>>>>>> MatV
-=======
->>>>>>> MatV
 end
