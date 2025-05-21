@@ -5,6 +5,7 @@ require 'sinatra/activerecord'
 require_relative 'models/user'
 require_relative 'models/account'
 require_relative 'models/transaction'
+require_relative 'models/financial_entity'
 require 'logger'
 require 'sinatra'
 
