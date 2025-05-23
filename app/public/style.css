@@ -64,3 +64,25 @@ h1 {
 .register-link a:hover {
   text-decoration: underline;
 }
+
+header a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+header a {
+  display: inline-block;
+  margin-bottom: 40px;
+}
+
+header img.logo {
+  scale: 20px;
+  object-fit: contain;
+  cursor: pointer;
+}

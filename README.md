@@ -29,9 +29,13 @@ docker-compose down
 ```bash
 docker-compose build
 ```
+- Levanta el contenedor (quita el argumento -d para ver la interaccion de la pagina con el software)
+
 ```bash
 docker-compose up -d
 ```
+- Hace una migracion para crear una DB
+
 ```bash
 docker compose exec app bundle exec rake db:migrate
 ```

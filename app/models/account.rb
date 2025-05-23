@@ -28,4 +28,24 @@ class Account < ActiveRecord::Base
       break unless Account.exists?(cvu: self.cvu)
     end
   end
+
+  before_validation :generate_unique_alias, on: :create
+
+  def generate_unique_alias
+    words = %w[sol luna rio mar monte fuego tierra aire nube gato perro pez ave hoja flor roca viento]
+    loop do
+#     generated = "#{SecureRandom.hex(2)}.#{SecureRandom.hex(2)}.#{SecureRandom.hex(2)}"
+        generated = [
+          words.sample,
+          words.sample,
+          words.sample
+        ].join('.')
+
+      unless Account.exists?(alias: generated)
+        self.alias = generated
+        break
+      end
+    end
+  end
+
 end
