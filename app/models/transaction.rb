@@ -64,6 +64,16 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  validate :sufficient_balance
+
+  def sufficient_balance
+   source_account = Account.find_by(cvu: source_cvu)
+   if source_account && source_account.balance < amount
+     errors.add(:amount, "Saldo insuficiente en la cuenta origen")
+   end
+  end
+
+
   # Método para actualizar status manualmente en caso de retraso en la transacción
   public
   def finalize_transaction(success:)
