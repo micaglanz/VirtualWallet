@@ -5,8 +5,8 @@ User.create(dni: "12345678", name: "Juan", surname: "Peña", address: "Calle fal
 User.create(dni: "87654321", name: "Ana", surname: "Gómez", address: "Av. Siempreviva 742", email: "ana.gomez@example.com", date_of_birth: "1992-07-15")
 
 # Crear cuentas
-juan_account = Account.create(dni_owner: "12345678", password: "supersecreta123", balance: 10000, status_active: true)
-ana_account  = Account.create(dni_owner: "87654321", password: "supersecreta123", balance: 10000, status_active: true)
+juan_account = Account.create(dni_owner: "12345678", password_digest: "supersecreta123", balance: 10000, status_active: true)
+ana_account  = Account.create(dni_owner: "87654321", password_digest: "supersecreta123", balance: 10000, status_active: true)
 
 # Crear transacción
 Transaction.create(source_cvu: Account.find_by(dni_owner: "12345678").cvu, destination_cvu: Account.find_by(dni_owner: "87654321").cvu, amount: 2500, details: "Transferencia entre Juan y Ana", status: "completed")
