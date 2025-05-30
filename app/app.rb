@@ -57,6 +57,7 @@ post '/login' do
     return erb :login
   end
 
+  
   account = user.account
 
   if account.nil?
@@ -68,6 +69,7 @@ post '/login' do
   
   if account.authenticate(password)
     session[:user_dni] = user.dni
+    logger.info "El usuario con DNI #{user.dni} inició sesión con la cuenta CVU: #{account.cvu} y saldo: #{account.balance}"
     redirect '/dashboard'
   else
     @error = "Email o contraseña incorrectos"

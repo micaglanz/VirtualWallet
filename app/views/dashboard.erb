@@ -28,6 +28,11 @@
   <nav class="sidebar">
     <h2>Mis Tarjetas</h2>
     
+    <div class="saldo-box">
+      <h3>Saldo disponible</h3>
+      <p>CVU: <%= current_user.account.cvu %></p>
+      <p>$<%= current_user.account.balance %></p>
+  </div>
   </nav>
 
   <!-- Contenido principal -->

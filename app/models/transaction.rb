@@ -73,12 +73,4 @@ class Transaction < ActiveRecord::Base
    end
   end
 
-
-  # Método para actualizar status manualmente en caso de retraso en la transacción
-  public
-  def finalize_transaction(success:)
-    new_status = success ? TRANSACTION_STATUS[:completed] : TRANSACTION_STATUS[:failed]
-    update(status: new_status) if pending?
-  end
-
 end
