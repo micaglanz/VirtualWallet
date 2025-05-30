@@ -86,3 +86,231 @@ header img.logo {
   object-fit: contain;
   cursor: pointer;
 }
+
+/* Navbar superior */
+nav.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 100;
+}
+nav.navbar .logo {
+  height: 40px;
+  cursor: pointer;
+}
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+.user-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 140px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  z-index: 200;
+}
+.dropdown-menu a, 
+.dropdown-menu form button {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+.dropdown-menu a:hover,
+.dropdown-menu form button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Nav lateral izquierdo */
+nav.sidebar {
+  position: fixed;
+  top: 60px; /* debajo del navbar superior */
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  z-index: 90;
+}
+
+nav.sidebar h2 {
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card-item {
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.card-company {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.card-number {
+  color: #666;
+}
+
+/* Contenido principal */
+.main-content {
+  margin-left: 270px; /* espacio para el sidebar + margen */
+  padding: 80px 20px 20px 20px; /* espacio para el navbar */
+}
+
+/* Navbar superior */
+nav.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 100;
+}
+nav.navbar .logo {
+  height: 40px;
+  cursor: pointer;
+}
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+.user-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 140px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+.dropdown-menu a, 
+.dropdown-menu form button {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+.dropdown-menu a:hover,
+.dropdown-menu form button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Nav lateral izquierdo */
+nav.sidebar {
+  position: fixed;
+  top: 60px; /* debajo del navbar superior */
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  z-index: 90;
+}
+
+nav.sidebar h2 {
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card-item {
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.card-company {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.card-number {
+  color: #666;
+}
+
+/* Contenido principal */
+.main-content {
+  margin-left: 270px; /* espacio para el sidebar + margen */
+  padding: 80px 20px 20px 20px; /* espacio para el navbar */
+}
+
+.profile-container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.profile-info p {
+  margin: 10px 0;
+}
+
+.navbar {
+  overflow: visible;
+}

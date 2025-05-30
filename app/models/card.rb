@@ -1,4 +1,4 @@
-class card < ApplicationRecord
+class Card < ActiveRecord::Base
   #Relationships
   belongs_to :account, foreign_key: 'account_cvu', primary_key: 'cvu', inverse_of: :cards
   has_many :transactions, foreign_key: 'card_id', dependent: :nullify
@@ -11,6 +11,7 @@ class card < ApplicationRecord
   validates :expire_date, presence: true
   validate  :expire_date_cannot_be_in_the_past
   validates :service, presence: true
+  validates :card_number, presence: true, uniqueness: true
 
   private
 

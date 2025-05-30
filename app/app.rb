@@ -65,7 +65,7 @@ post '/login' do
 
 #  if user && user.authenticate(params[:password])
   
-  if account.password == password
+  if account.authenticate(password)
     session[:user_dni] = user.dni
     redirect '/dashboard'
   else
@@ -94,10 +94,13 @@ post '/registro' do
     account = Account.new(
       dni_owner: user.dni,
       password: params[:password],
+      password_confirmation: params[:password_confirmation],
       balance: 500,
       status_active: true
       # el alias y el cvu se generan automáticamente con un callback
     )
+
+    puts account.password_digest
 
     if account.save
       session[:user_dni] = user.dni
@@ -113,25 +116,6 @@ post '/registro' do
   end
 end
 
-=begin
-#Display form values
-post '/registro' do
-  logger.info "Intento de registro recibido:"
-  logger.info "DNI: #{params[:dni]}"
-  logger.info "Nombre: #{params[:name]}"
-  logger.info "Apellido: #{params[:surname]}"
-  logger.info "Dirección: #{params[:address]}"
-  logger.info "Email: #{params[:email]}"
-  logger.info "Fecha de nacimiento: #{params[:date_of_birth]}"
-  logger.info "Password: #{params[:password]}"
-  logger.info "Confirmación de password: #{params[:password_confirmation]}"
-
-  # Por ahora, solo renderiza la vista de registro con un mensaje
-  @mensaje = "Datos recibidos. Revisa la consola del servidor para verlos."
-  erb :registro
-end
-=end
-
 #Dashboard //Main Page
 get '/dashboard' do
   if session[:user_dni]
@@ -144,4 +128,23 @@ get '/dashboard' do
   else
     halt 401, "No autorizado"
   end
+end
+
+# Cerrar sesión
+post '/logout' do
+  session.clear
+  redirect '/'
+end
+
+helpers do
+  def current_user
+    if session[:user_dni]
+      @current_user ||= User.find_by(dni: session[:user_dni])
+    end
+  end
+end
+
+get '/profile' do
+  @user = current_user 
+  erb :profile
 end

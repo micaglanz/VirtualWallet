@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bienvenido - VirtualWallet</title>
+  <title>Perfil de Usuario - VirtualWallet</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
+
   <!-- Navbar superior -->
   <nav class="navbar">
     <a href="/">
@@ -24,21 +25,18 @@
     </div>
   </nav>
 
-  <!-- Sidebar lateral izquierdo -->
-  <nav class="sidebar">
-    <h2>Mis Tarjetas</h2>
-    
-  </nav>
 
-  <!-- Contenido principal -->
-  <div class="main-content">
-    <div class="login-box welcome-box">
-      <h1>Bienvenido, <%= user.name %>!</h1>
-      <p>Has iniciado sesión correctamente en VirtualWallet.</p>
+  <main class="profile-container">
+    <h1>Perfil de Usuario</h1>
+    <div class="profile-info">
+      <p><strong>Nombre:</strong> <%= @user.name %></p>
+      <p><strong>Email:</strong> <%= @user.email %></p>
+      <p><strong>DNI:</strong> <%= @user.dni %></p>
+      <!-- Agrega más campos si querés -->
     </div>
-  </div>
+  </main>
 
-  <script>
+   <script>
     function toggleMenu() {
       const menu = document.getElementById('dropdown-menu');
       if (menu.style.display === 'block') {
@@ -57,5 +55,6 @@
       }
     });
   </script>
+
 </body>
 </html>

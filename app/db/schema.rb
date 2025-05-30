@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_16_232850) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
   create_table "accounts", id: false, force: :cascade do |t|
     t.string "cvu", null: false
     t.string "dni_owner", null: false
-    t.string "password", null: false
+    t.string "password_digest", null: false
     t.integer "balance", default: 0, null: false
     t.boolean "status_active", default: true
     t.string "alias", null: false
@@ -22,6 +22,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_16_232850) do
     t.datetime "updated_at", null: false
     t.index ["alias"], name: "index_accounts_on_alias", unique: true
     t.index ["cvu"], name: "index_accounts_on_cvu", unique: true
+  end
+
+  create_table "cards", force: :cascade do |t|
+    t.string "responsible_name", null: false
+    t.date "expire_date", null: false
+    t.integer "service", null: false
+    t.string "account_cvu", null: false
+    t.string "card_number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_cvu"], name: "index_cards_on_account_cvu"
+    t.index ["card_number"], name: "index_cards_on_card_number", unique: true
+  end
+
+  create_table "financial_entities", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "entity_type"
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "transactions", force: :cascade do |t|
