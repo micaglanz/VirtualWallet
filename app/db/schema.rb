@@ -38,8 +38,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
 
   create_table "financial_entities", force: :cascade do |t|
     t.string "name", null: false
-    t.string "entity_type"
-    t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
