@@ -60,7 +60,7 @@ class Transaction < ActiveRecord::Base
     rescue StandardError => e
       update_column(:status, TRANSACTION_STATUS[:failed])
       # Opcional: loguear el error
-      Rails.logger.error("Falló la transferencia: #{e.message}")
+      logger.error("Falló la transferencia: #{e.message}")
     end
   end
 

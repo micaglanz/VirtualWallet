@@ -1,5 +1,7 @@
 # Archivos bases de datos
 app/db/*.sqlite3
+app/db/*.sqlite3-shm
+app/db/*.sqlite3-wal
 
 # .gitignore
 development.sqlite3

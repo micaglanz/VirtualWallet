@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bienvenido - VirtualWallet</title>
   <link rel="stylesheet" href="/style.css" />
+  <style>
+    .fade-out {
+      opacity: 0;
+      transition: opacity 1s ease-out;
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar superior -->
@@ -27,17 +33,16 @@
   <!-- Sidebar lateral izquierdo -->
   <nav class="sidebar">
     <h2>Mis Tarjetas</h2>
-    
     <div class="saldo-box">
       <h3>Saldo disponible</h3>
       <p>CVU: <%= current_user.account.cvu %></p>
-      <p>$<%= current_user.account.balance %></p>
-  </div>
+      <p>Saldo: $<%= current_user.account.balance %></p>
+    </div>
   </nav>
 
   <!-- Contenido principal -->
   <div class="main-content">
-    <div class="login-box welcome-box">
+    <div class="login-box welcome-box" id="welcome-box">
       <h1>Bienvenido, <%= user.name %>!</h1>
       <p>Has iniciado sesión correctamente en VirtualWallet.</p>
     </div>
@@ -53,13 +58,23 @@
       }
     }
 
-    // Cierra el menú si haces click fuera
     document.addEventListener('click', function(event) {
       const userMenu = document.querySelector('.user-menu');
       const menu = document.getElementById('dropdown-menu');
       if (!userMenu.contains(event.target)) {
         menu.style.display = 'none';
       }
+    });
+
+    // Fade-out del mensaje de bienvenida
+    window.addEventListener('DOMContentLoaded', () => {
+      const welcomeBox = document.getElementById('welcome-box');
+      setTimeout(() => {
+        welcomeBox.classList.add('fade-out');
+        setTimeout(() => {
+          welcomeBox.remove();
+        }, 1000);
+      }, 1000); // Esperar 1 segundo antes de iniciar el fade
     });
   </script>
 </body>
