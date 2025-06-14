@@ -10,8 +10,10 @@ ana_account  = Account.create(dni_owner: "87654321", password_digest: "supersecr
 
 # Crear transacción
 Transaction.create(source_cvu: Account.find_by(dni_owner: "12345678").cvu, destination_cvu: Account.find_by(dni_owner: "87654321").cvu, amount: 2500, details: "Transferencia entre Juan y Ana", status: "completed")
-Transaction.create(source_cvu: Account.find_by(dni_owner: "65498789").cvu, destination_cvu: Account.find_by(dni_owner: "12333456").cvu, amount: 200, details: "Transferencia entre Juan y Ana")
-Transaction.create(source_cvu: Account.find_by(dni_owner: "65498789").cvu, destination_cvu: Account.find_by(dni_owner: "12333456").cvu, amount: 350, details: "Transferencia entre Juan y Ana")
+# Transaction.create(source_cvu: Account.find_by(dni_owner: "65498789").cvu, destination_cvu: Account.find_by(dni_owner: "12333456").cvu, amount: 200, details: "Transferencia entre Cavi y Juan")
+
+juan_card = Card.create( responsible_name: "Juan Pérez", expire_date: Date.new(2026, 12, 31), service: :visa, account_cvu: "12345678", card_number: "3000000000000003")
+ana_card = Card.create( responsible_name: "Ana Gomez", expire_date: Date.new(2026, 06, 30), service: :mastercard, account_cvu: "87654321", card_number: "4444444444444444")
 
 #Transaccion solo dsps de crear un usuario a travez de la web
 #Transaction.create(source_cvu: Account.find_by(dni_owner: "87654321").cvu, destination_cvu: Account.find_by(dni_owner: "12333456").cvu, amount: 2500, details: "Transferencia entre Ana y Mat", status: "completed")

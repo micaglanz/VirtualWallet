@@ -147,17 +147,24 @@ nav.navbar img.logo {
 }
 
 .user-menu {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
+  position: relative;
 }
 
 .user-avatar {
-  height: 40px;
-  width: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #ccc;
 }
+
+.user-name {
+  color: #fff;
+  font-weight: bold;
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -383,4 +390,113 @@ nav.sidebar h2 {
   font-size: 20px;
   font-weight: bold;
   color: #2d7dd2;
+}
+.add-card-box {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.add-card-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-card-button:hover {
+  background-color: #0056b3;
+}
+
+.card-preview {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-container {
+  max-width: 500px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.form-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.card-form .form-group {
+  margin-bottom: 18px;
+}
+
+.card-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.card-form input[type="text"],
+.card-form input[type="month"],
+.card-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.submit-button {
+  background-color: #1e88e5;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.submit-button:hover {
+  background-color: #1565c0;
+}
+
+.back-link {
+  text-decoration: none;
+  color: #888;
+  font-size: 14px;
+}
+
+.back-link:hover {
+  color: #555;
+}
+
+.error-messages {
+  background-color: #ffebee;
+  color: #c62828;
+  border-left: 4px solid #c62828;
+  padding: 12px 16px;
+  margin: 20px auto;
+  max-width: 500px;
+  border-radius: 6px;
 }

@@ -19,6 +19,7 @@
       <img src="/logo.png" alt="Logo Wallet" class="logo" />
     </a>
     <div class="user-menu" onclick="toggleMenu()">
+      <span class="user-name"><%= current_user.name %></span>
       <img src="/user.png" alt="Usuario" class="user-avatar" />
       <div class="dropdown-menu" id="dropdown-menu">
         <a href="/profile">Perfil</a>
@@ -28,15 +29,31 @@
         </form>
       </div>
     </div>
+
   </nav>
 
   <!-- Sidebar lateral izquierdo -->
   <nav class="sidebar">
+    <h2></h2>
     <h2>Mis Tarjetas</h2>
-    <div class="saldo-box">
-      <h3>Saldo disponible</h3>
-      <p>CVU: <%= current_user.account.cvu %></p>
-      <p>Saldo: $<%= current_user.account.balance %></p>
+
+    <!-- Listado de tarjetas -->
+    <div class="card-preview">
+      <% current_user.account.cards.each do |card| %>
+          <p><strong><%= card.service_name.capitalize %></strong></p>
+          <p>**** **** **** <%= card.card_number[-4..] %></p>
+          <p>Vence: <%= card.expire_date.strftime("%m/%Y") %></p>
+          <p>Saldo: $<%= card.account.balance %></p>
+        </div>
+      <% end %>
+    </div>
+
+      
+    <!-- Botón para agregar tarjeta -->
+    <div class="add-card-box">
+    <form action="/cards/new" method="get">
+      <button type="submit" class="add-card-button">+ Agregar tarjeta</button>
+    </form>
     </div>
   </nav>
 

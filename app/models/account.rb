@@ -1,24 +1,24 @@
 class Account < ActiveRecord::Base
   
-    #Authentication
-    has_secure_password
-    
-    self.primary_key = 'cvu'
+  #Authentication
+  has_secure_password
+  
+  self.primary_key = 'cvu'
 
-    #Relationships
-    belongs_to :user, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :account
+  #Relationships
+  belongs_to :user, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :account
 
-    has_many :cards, foreign_key: 'account_cvu', primary_key: 'cvu', dependent: :destroy
-    has_many :transactions_done, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
-    has_many :transactios_recived, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
-    
-    #Validations
-    validates :cvu, presence: true, uniqueness: true
-    validates :alias, presence: true
-    validates :balance, presence: true, numericality: {  greater_than_or_equal_to: 0 }
-    validates :status_active, presence: true, inclusion: { in: [true, false] }
+  has_many :cards, foreign_key: 'account_cvu', primary_key: 'cvu', dependent: :destroy
+  has_many :transactions_done, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
+  has_many :transactios_recived, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
+  
+  #Validations
+  validates :cvu, presence: true, uniqueness: true
+  validates :alias, presence: true
+  validates :balance, presence: true, numericality: {  greater_than_or_equal_to: 0 }
+  validates :status_active, presence: true, inclusion: { in: [true, false] }
 
-    # Callbacks
+  # Callbacks
   before_validation :generate_unique_cvu, on: :create
 
   private
@@ -37,7 +37,6 @@ class Account < ActiveRecord::Base
   def generate_unique_alias
     words = %w[sol luna rio mar monte fuego tierra aire nube gato perro pez ave hoja flor roca viento]
     loop do
-#     generated = "#{SecureRandom.hex(2)}.#{SecureRandom.hex(2)}.#{SecureRandom.hex(2)}"
         generated = [
           words.sample,
           words.sample,

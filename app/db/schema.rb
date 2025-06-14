@@ -38,10 +38,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
 
   create_table "financial_entities", force: :cascade do |t|
     t.string "name", null: false
-    t.string "entity_type"
-    t.string "currency"
+    t.string "account_cvu", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_cvu"], name: "index_financial_entities_on_account_cvu"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -71,6 +71,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
   end
 
   add_foreign_key "accounts", "users", column: "dni_owner", primary_key: "dni"
+  add_foreign_key "financial_entities", "accounts", column: "account_cvu", primary_key: "cvu"
   add_foreign_key "transactions", "accounts", column: "destination_cvu", primary_key: "cvu"
   add_foreign_key "transactions", "accounts", column: "source_cvu", primary_key: "cvu"
 end
