@@ -6,4 +6,4 @@ app/db/schema.rb
 
 # .gitignore
 development.sqlite3
-
+schema.rb
