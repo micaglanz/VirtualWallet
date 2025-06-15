@@ -35,14 +35,13 @@
         <% end %>
       </select>
 
-      <input type="hidden" name="card[account_cvu]" value="<%= current_user.account.cvu %>">
       <input type="hidden" name="card[responsible_name]" value="<%= current_user.name %>">
       <h2></h2>
       <button type="submit">Crear tarjeta</button>
     </form>
 
     <div class="register-link">
-      <p><a href="/">← Volver al inicio</a></p>
+      <p><a href="/dashboard">← Volver</a></p>
     </div>
 
   </div>

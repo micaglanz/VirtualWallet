@@ -1,7 +1,6 @@
 class Card < ActiveRecord::Base
   # Relationships
-  belongs_to :account, foreign_key: 'account_cvu', primary_key: 'cvu', inverse_of: :cards
-  has_many :transactions, foreign_key: 'card_id', dependent: :nullify
+  belongs_to :account, foreign_key: 'account_cvu', primary_key: 'cvu', inverse_of: :card
 
   # Enumerations 
   SERVICE_VALUES = {mastercard: 0, visa: 1}

@@ -6,11 +6,12 @@ class Account < ActiveRecord::Base
   self.primary_key = 'cvu'
 
   #Relationships
-  belongs_to :user, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :account
+  belongs_to :user, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :accounts
 
-  has_many :cards, foreign_key: 'account_cvu', primary_key: 'cvu', dependent: :destroy
+  has_one :card, foreign_key: 'account_cvu', primary_key: 'cvu', inverse_of: :account, dependent: :destroy
+
   has_many :transactions_done, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
-  has_many :transactios_recived, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
+  has_many :transactios_recieved, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
   
   #Validations
   validates :cvu, presence: true, uniqueness: true

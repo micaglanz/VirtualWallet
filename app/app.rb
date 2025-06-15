@@ -76,9 +76,6 @@ class App < Sinatra::Application
     end
   end
 
-  configure do
-    create_default_financial_entity
-  end
 
   # Rutas de Sinatra
   get '/' do
@@ -215,26 +212,65 @@ class App < Sinatra::Application
   end
 
   post '/cards' do
-    # Si viene en formato "2025-07"
-    expire_month = params[:card][:expire_date]
-    service = params[:card][:service].to_i
+    expire_month = params[:card][:expire_date]           # formato: "2025-07"
+    service = params[:card][:service].to_i               # convierte a entero
+    complete_date = "#{expire_month}-01"                 # agrega día por defecto
 
-    # Agregás el día 01 al final
-    complete_date = "#{expire_month}-01"
-
-    card = Card.new(
-      responsible_name: params[:card][:responsible_name],
-      expire_date: Date.parse(complete_date),
-      service: service,
-      card_number: params[:card][:card_number],
-      account_cvu: current_user.account.cvu
+    # Crear una nueva cuenta para la tarjeta
+    card_account = Account.new(
+      dni_owner: current_user.dni,
+      password: "default_password",
+      password_confirmation: "default_password",
+      balance: 501,
+      status_active: true
+      # CVU y alias generados por callback
     )
 
-    if card.save
-      redirect '/dashboard'
+    if card_account.save
+      # Crear la tarjeta asociada a esa cuenta
+      card = Card.new(
+        responsible_name: params[:card][:responsible_name],
+        expire_date: Date.parse(complete_date),
+        service: service,
+        card_number: params[:card][:card_number],
+        account_cvu: card_account.cvu
+      )
+
+      if card.save
+        redirect '/dashboard'
+      else
+        card_account.destroy
+        return erb :newcard, locals: { errors: card.errors.full_messages }
+      end
     else
-      erb :newcard, locals: { errors: card.errors.full_messages }
+      return erb :newcard, locals: { errors: card_account.errors.full_messages }
     end
   end
+
+  post '/cards/delete' do
+    card = Card.find_by(card_number: params[:card_number])
+
+    if card
+        # Buscar la cuenta asociada y desactivarla
+      # Obtener el CVU desde la tarjeta
+      cvu = card.account_cvu
+
+      # Buscar la cuenta a través del CVU y desactivarla
+      account = Account.find_by(cvu: cvu)
+
+      if account
+        updated = account.update_column(:status_active, false)
+        puts "¿Se actualizó el estado?: #{updated}"
+      end
+
+
+      card.destroy
+      redirect '/dashboard'
+    else
+      status 404
+      "Tarjeta no encontrada"
+    end
+  end
+
 
 end

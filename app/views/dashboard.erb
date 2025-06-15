@@ -39,14 +39,30 @@
 
     <!-- Listado de tarjetas -->
     <div class="card-preview">
-      <% current_user.account.cards.each do |card| %>
+      <% current_user.accounts.each do |account| %>
+        <% card = account.card %>
+        <% if card %>
+          <!-- Mostrar la tarjeta -->
           <p><strong><%= card.service_name.capitalize %></strong></p>
           <p>**** **** **** <%= card.card_number[-4..] %></p>
           <p>Vence: <%= card.expire_date.strftime("%m/%Y") %></p>
-          <p>Saldo: $<%= card.account.balance %></p>
-        </div>
+          <p>Saldo: $<%= account.balance %></p>
+          <div class="card-actions">
+            <button class="menu-toggle" onclick="toggleCardMenu('<%= card.id %>')">⋮</button>
+
+            <div class="card-menu" id="menu-<%= card.id %>">
+              <button type="button" onclick="copyToClipboard('<%= account.alias %>')">Copiar alias</button>
+              <button type="button" onclick="copyToClipboard('<%= account.cvu %>')">Copiar CVU</button>
+              <form action="/cards/delete" method="post" onsubmit="return confirm('¿Estás seguro de que querés eliminar esta tarjeta?');">
+                <input type="hidden" name="card_number" value="<%= card.card_number %>">
+                <button type="submit">Eliminar tarjeta</button>
+              </form>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
+
 
       
     <!-- Botón para agregar tarjeta -->
@@ -93,6 +109,36 @@
         }, 1000);
       }, 1000); // Esperar 1 segundo antes de iniciar el fade
     });
+
+    function toggleCardMenu(cardId) {
+      const menu = document.getElementById(`menu-${cardId}`);
+      // Alterna visibilidad
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        // Cierra otros menús
+        document.querySelectorAll('.card-menu').forEach(m => m.style.display = 'none');
+        menu.style.display = 'block';
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copiado al portapapeles: " + text);
+      }).catch(err => {
+        alert("Error al copiar: " + err);
+      });
+    }
+
+    // Cierra todos los menús si hacés click fuera
+    document.addEventListener('click', function(event) {
+      if (!event.target.matches('.menu-toggle')) {
+        document.querySelectorAll('.card-menu').forEach(menu => {
+          menu.style.display = 'none';
+        });
+      }
+    });
   </script>
+
 </body>
 </html>
