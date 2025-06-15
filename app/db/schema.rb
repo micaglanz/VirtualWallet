@@ -14,7 +14,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
   create_table "accounts", id: false, force: :cascade do |t|
     t.string "cvu", null: false
     t.string "dni_owner", null: false
-    t.string "password_digest", null: false
     t.integer "balance", default: 0, null: false
     t.boolean "status_active", default: true
     t.string "alias", null: false
@@ -45,8 +44,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.string "source_cvu", null: false
-    t.string "destination_cvu", null: false
+    t.string "source_cvu"
+    t.string "destination_cvu"
     t.string "details"
     t.integer "amount", null: false
     t.string "status", null: false
@@ -63,6 +62,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
     t.string "surname", null: false
     t.string "address", null: false
     t.string "email", null: false
+    t.string "password_digest", null: false
     t.date "date_of_birth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -70,8 +70,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_30_022735) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "accounts", "users", column: "dni_owner", primary_key: "dni"
+  add_foreign_key "accounts", "users", column: "dni_owner", primary_key: "dni", on_delete: :cascade
   add_foreign_key "financial_entities", "accounts", column: "account_cvu", primary_key: "cvu"
-  add_foreign_key "transactions", "accounts", column: "destination_cvu", primary_key: "cvu"
-  add_foreign_key "transactions", "accounts", column: "source_cvu", primary_key: "cvu"
+  add_foreign_key "transactions", "accounts", column: "destination_cvu", primary_key: "cvu", on_delete: :nullify
+  add_foreign_key "transactions", "accounts", column: "source_cvu", primary_key: "cvu", on_delete: :nullify
 end

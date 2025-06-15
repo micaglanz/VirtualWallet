@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
     self.primary_key = 'dni'
 
     #Relationships
-    has_many :accounts, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :user
+    has_many :accounts, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :user, dependent: :destroy
 
 
     #Validations

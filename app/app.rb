@@ -89,16 +89,14 @@ class App < Sinatra::Application
   end
 
   post '/login' do
-
     user = User.find_by(email: params[:email])
-    dni = params[:dni]
     password = params[:password]
-  
+
     if user.nil?
       @error = "Usuario no encontrado"
       return erb :login
     end 
-    
+
     account = user.accounts.first
 
     if account.nil?
@@ -112,9 +110,10 @@ class App < Sinatra::Application
       redirect '/dashboard'
     else
       @error = "Email o contraseña incorrectos"
-      erb :login
+      return erb :login
     end
   end
+
 
   #Register
   get '/registro' do
@@ -318,9 +317,16 @@ class App < Sinatra::Application
       @error = "La contraseña es incorrecta."
       return erb :confirm_delete, locals: { user: user}
     end
-
-    user.destroy
-    session.clear
-    redirect '/', 303
+    
+    if user
+      dni = user.dni
+      user.destroy
+      logger.info "Usuario con DNI #{dni} y sus cuentas han sido eliminados."
+      session.clear
+      redirect '/login'
+    else
+      @error = "Usuario no encontrado"
+      erb :dashboard
+    end
   end
 end

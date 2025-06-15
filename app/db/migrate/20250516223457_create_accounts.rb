@@ -14,7 +14,7 @@ class CreateAccounts < ActiveRecord::Migration[8.0]
     add_index :accounts, :alias, unique: true
     add_index :accounts, :cvu, unique: true
     add_index :users, :dni, unique: true
-    add_foreign_key :accounts, :users, column: :dni_owner, primary_key: :dni
+    add_foreign_key :accounts, :users, column: :dni_owner, primary_key: :dni, on_delete: :cascade
   end
 end
 

@@ -8,8 +8,9 @@ class Account < ActiveRecord::Base
 
   has_one :card, foreign_key: 'account_cvu', primary_key: 'cvu', inverse_of: :account, dependent: :destroy
 
-  has_many :transactions_done, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
-  has_many :transactios_recieved, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
+  has_many :transactions_done, class_name: 'Transaction', foreign_key: 'source_cvu', primary_key: 'cvu', dependent: :nullify
+  has_many :transactions_received, class_name: 'Transaction', foreign_key: 'destination_cvu', primary_key: 'cvu', dependent: :nullify
+
   
   #Validations
   validates :cvu, presence: true, uniqueness: true
