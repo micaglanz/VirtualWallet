@@ -4,7 +4,6 @@ class CreateAccounts < ActiveRecord::Migration[8.0]
       create_table :accounts, id: false, primary_key: :cvu do |t|
         t.string :cvu, null: false
         t.string :dni_owner, null: false
-        t.string :password_digest, null: false
         t.integer :balance, null: false, default: 0
         t.boolean :status_active, default: true
         t.string :alias, null: false

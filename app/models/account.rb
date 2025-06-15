@@ -1,8 +1,6 @@
 class Account < ActiveRecord::Base
   
-  #Authentication
-  has_secure_password
-  
+ 
   self.primary_key = 'cvu'
 
   #Relationships
@@ -50,38 +48,4 @@ class Account < ActiveRecord::Base
       end
     end
   end
-
-  # Validar que password y password_confirmation coincidan (opcional, pero recomendado)
-  validate :password_confirmation_matches
-
-  def password_confirmation_matches
-    if password != password_confirmation
-      errors.add(:password_confirmation, "no coincide con la contraseña")
-    end
-  end
-
-  #Cards
-=begin
-  after_commit :create_card_with_defaults, on: :create
-
-  private
-
-  def create_card_with_defaults
-    responsible = user&.name || "Desconocido"
-    self.cards.create!(
-      responsible_name: responsible,
-      service: :visa,
-      expire_date: 5.years.from_now.to_date,
-      card_number: generate_unique_card_number
-    )
-  end
-
-  def generate_unique_card_number
-    loop do
-      number = Array.new(16) { rand(0..9) }.join
-      break number unless Card.exists?(card_number: number)
-    end
-  end
-=end
-
 end

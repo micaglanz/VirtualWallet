@@ -1,0 +1,48 @@
+<h2>Configuración de la cuenta</h2>
+
+<% if @error %>
+    <p style="color: red;"> <%= @error %></p>
+<% elsif @success %>
+    <p style="color: green;"><%= @success %></p>
+<% end %>
+
+<form action="/settings" method="post">
+    <div>
+        <label for="name"> Nuevo nombre:</label>
+        <input type="text" name="name" id="name" value="<%= user.name %>" required>
+    </div>
+
+    <div>
+        <label for="current_password">Contraseña actual:</label>
+        <input type="password" name="current_password" id="current_password" required>
+    </div>
+
+    <div>
+        <label for="new_password">Nueva contraseña:</label>
+        <input type="password" name="new_password" id="new_password">
+    </div>
+
+    <div>
+        <label for="password_confirmation">Confirmar nueva contraseña:</label>
+        <input type="password" name="password_confirmation" id="password_confirmation">
+    </div>
+
+    <div>
+        <button type="submit">Guardar cambios</button>
+    </div>
+</form>
+
+<hr>
+<h3>Eliminar cuenta</h3>
+<p style="color: red;">¡Esta acción es irreversible!</p>
+
+<form action="/confirm_delete" method="get">
+    <button type="submit" style="background-color: red; color: white;">
+        Eliminar mi cuenta
+    </button>
+</form>
+        
+
+<br>
+
+<a href="/dashboard">Volver a inicio</a>

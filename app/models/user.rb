@@ -2,6 +2,9 @@
 # models/user.rb
 class User < ActiveRecord::Base
 
+    #Authentication
+    has_secure_password
+
     self.primary_key = 'dni'
 
     #Relationships
@@ -12,4 +15,13 @@ class User < ActiveRecord::Base
     validates :dni, presence: true, uniqueness: true
     validates :name, :surname, :address, :date_of_birth, presence: true
     validates :email, presence: true
+      # Validar que password y password_confirmation coincidan (opcional, pero recomendado)
+    validate :password_confirmation_matches
+
+    def password_confirmation_matches
+        if password != password_confirmation
+        errors.add(:password_confirmation, "no coincide con la contraseña")
+        end
+    end
+
 end

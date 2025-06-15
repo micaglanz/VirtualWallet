@@ -42,14 +42,14 @@ class App < Sinatra::Application
         surname: "Central",
         address: "Oroño 303",
         email: "bancocentral@gov.com.ar",
+        password: "default_password",
+        password_confirmation: "default_password",
         date_of_birth: Time.current
       )
 
       if user.save
         account = Account.new(
-          dni_owner: user.dni,
-          password: "default_password",
-          password_confirmation: "default_password",
+          dni_owner: user.dni, 
           balance: 1000000000,
           status_active: true,
         )
@@ -99,14 +99,14 @@ class App < Sinatra::Application
       return erb :login
     end 
     
-    account = user.account
+    account = user.accounts.first
 
     if account.nil?
       @error = "Cuenta no asociada al usuario"
       return erb :login
     end
 
-    if account.authenticate(password)
+    if user.authenticate(password)
       session[:user_dni] = user.dni
       logger.info "El usuario con DNI #{user.dni} inició sesión con la cuenta CVU: #{account.cvu} y saldo: #{account.balance}"
       redirect '/dashboard'
@@ -129,14 +129,14 @@ class App < Sinatra::Application
       surname: params[:surname],
       address: params[:address],
       email: params[:email],
+      password: params[:password],
+      password_confirmation: params[:password_confirmation],
       date_of_birth: params[:date_of_birth]
     )
 
     if user.save
       account = Account.new(
         dni_owner: user.dni,
-        password: params[:password],
-        password_confirmation: params[:password_confirmation],
         balance: 500,
         status_active: true
         # El alias y el CVU se generan automáticamente con un callback
@@ -219,8 +219,6 @@ class App < Sinatra::Application
     # Crear una nueva cuenta para la tarjeta
     card_account = Account.new(
       dni_owner: current_user.dni,
-      password: "default_password",
-      password_confirmation: "default_password",
       balance: 501,
       status_active: true
       # CVU y alias generados por callback
@@ -272,5 +270,57 @@ class App < Sinatra::Application
     end
   end
 
+  get '/settings' do
+    redirect '/login' unless current_user
+    erb :settings, locals: { user: current_user}
+  end
 
+  post '/settings' do
+    redirect '/login' unless current_user
+
+    user = current_user
+
+    #Verificar contraseña actual para poder modificar campos
+    unless user.authenticate(params[:current_password])
+      @error = "La contraseña provista es incorrecta."
+      return erb :settings, locals: { user: user}
+    end
+
+    #Actualizar nombre
+    user.name = params[:name] if params[:name] && !params[:name].empty?
+
+    #Actualizar contraseña
+    if params[:new_password] && !params[:new_password].empty?
+      user.password = params[:new_password]
+      user.password_confirmation = params[:password_confirmation]
+    end
+
+    if user.save
+      @success = "Se han modificado los datos de usuario."
+    else
+      @error = user.errors.full_messages.join(", ")
+    end
+
+    erb :settings, locals: { user: user}
+  end
+
+  get '/confirm_delete' do
+    redirect '/login' unless current_user
+    erb :confirm_delete, locals: { user: current_user }
+  end
+
+  post '/delete_account' do
+    redirect '/login' unless current_user
+
+    user = current_user
+
+    unless user.authenticate(params[:current_password])
+      @error = "La contraseña es incorrecta."
+      return erb :confirm_delete, locals: { user: user}
+    end
+
+    user.destroy
+    session.clear
+    redirect '/', 303
+  end
 end
