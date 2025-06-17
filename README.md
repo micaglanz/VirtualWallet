@@ -45,7 +45,7 @@ docker compose exec app bundle exec rake db:migrate db:seed
 - Si no es la primera ves que hacer la migracion y la carga del seed
 
 ```bash
-docker compose exec app bundle exec rake db:migrate db:reset
+docker compose exec app bundle exec rake db:reset
 ```
 
 - El servicio estará inicializado en:
