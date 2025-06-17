@@ -91,7 +91,7 @@ class App < Sinatra::Application
     if user.save
       account = Account.new(
         dni_owner: user.dni,
-        balance: 500,
+        balance: 0,
         status_active: true
         # El alias y el CVU se generan automáticamente con un callback
       )
@@ -108,6 +108,20 @@ class App < Sinatra::Application
 
         if card.save
           session[:user_dni] = user.dni
+          
+          fne_account = Account.find_by(dni_owner: "00000001")
+          if fne_account
+          Transaction.create!(
+                source_cvu: fne_account.cvu,
+                destination_cvu: account.cvu,
+                amount: 500,
+                details: "Bonificación por cuenta nueva",
+            )
+            puts "Transacción entre EntidadFinanciera y #{user.name} creada correctamente."
+          else
+            puts "No se pudo crear la transacción porque no existen ambas cuentas."
+          end
+
           redirect '/dashboard'
         else
           # Si falla la creación de la tarjeta, deshacer cuenta y usuario

@@ -134,22 +134,47 @@ else
   puts "El usuario Ana ya existe. Seed no se ejecutó."
 end
 
-# === Transacción entre Juan y Ana ===
+# === Transacciónes ===
+fne_account = Account.find_by(dni_owner: "00000001")
 juan_account = Account.find_by(dni_owner: "12345678")
 ana_account  = Account.find_by(dni_owner: "87654321")
 
-if juan_account && ana_account
-  unless Transaction.exists?(source_cvu: juan_account.cvu, destination_cvu: ana_account.cvu, amount: 2500)
+# === Transacción entre EntidadFinanciera -> Juan, EntidadFinanciera -> Ana ===
+
+if fne_account && juan_account
     Transaction.create!(
-      source_cvu: juan_account.cvu,
-      destination_cvu: ana_account.cvu,
-      amount: 2500,
-      details: "Transferencia entre Juan y Ana",
+        source_cvu: fne_account.cvu,
+        destination_cvu: juan_account.cvu,
+        amount: 500,
+        details: "Bonificación por cuenta nueva",
+    )
+    puts "Transacción entre EntidadFinanciera y Juan creada correctamente."
+else
+  puts "No se pudo crear la transacción porque no existen ambas cuentas."
+end
+
+if fne_account && ana_account
+    Transaction.create!(
+        source_cvu: fne_account.cvu,
+        destination_cvu: ana_account.cvu,
+        amount: 500,
+        details: "Bonificación por cuenta nueva",
+    )
+    puts "Transacción entre EntidadFinanciera y Ana creada correctamente."
+else
+  puts "No se pudo crear la transacción porque no existen ambas cuentas."
+end
+
+# === Transacción entre Juan y Ana ===
+
+if juan_account && ana_account
+    Transaction.create!(
+        source_cvu: juan_account.cvu,
+        destination_cvu: ana_account.cvu,
+        amount: 2500,
+        details: "Transferencia entre Juan y Ana",
     )
     puts "Transacción entre Juan y Ana creada correctamente."
-  else
-    puts "La transacción entre Juan y Ana ya existe. Seed no se ejecutó."
-  end
 else
   puts "No se pudo crear la transacción porque no existen ambas cuentas."
 end
