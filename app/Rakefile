@@ -1,4 +1,3 @@
-
 begin
   require 'sinatra/activerecord/rake'
 rescue LoadError => e

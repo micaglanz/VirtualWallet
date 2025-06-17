@@ -32,51 +32,6 @@ class App < Sinatra::Application
     end
   end
 
-  def self.create_default_financial_entity
-    entity_name = "Banco Central"
-
-    unless FinancialEntity.exists?(name: entity_name)
-      user = User.new(
-        dni: 00000001,
-        name: "Banco",
-        surname: "Central",
-        address: "Oroño 303",
-        email: "bancocentral@gov.com.ar",
-        password: "default_password",
-        password_confirmation: "default_password",
-        date_of_birth: Time.current
-      )
-
-      if user.save
-        account = Account.new(
-          dni_owner: user.dni, 
-          balance: 1000000000,
-          status_active: true,
-        )
-
-        if account.save
-          fentity = FinancialEntity.new(
-            name: entity_name,
-            account_cvu: account.cvu
-          )
-
-          if fentity.save
-            puts "Entidad financiera '#{entity_name}' creada con su cuenta asociada."
-          else
-            puts "Error al crear la entidad financiera: #{fentity.errors.full_messages}"
-          end
-        else
-          puts "Error al crear la cuenta: #{account.errors.full_messages}"
-        end
-      else
-        puts "Error al crear el usuario: #{user.errors.full_messages}"
-      end
-    else
-      puts "Entidad financiera '#{entity_name}' ya existe."
-    end
-  end
-
-
   # Rutas de Sinatra
   get '/' do
     logger.info "Accediendo a la página principal"
