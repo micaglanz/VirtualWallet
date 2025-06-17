@@ -3,8 +3,8 @@
 ## 📄 Documentación
 
 - 📘 [Diagrama de clase UML]
-    V1 - (UML-VirtualWallet.png)
-    V2 - (SVGWallet_V2.jpg)
+    [V1](UML-VirtualWallet.png)
+    [V2](SVGWallet_V2.jpg)
 - 🎨 [Figma - Design Preview](https://www.figma.com/design/2Qq6lUiSN2v3rzlVPjB7bj/Billetera-Virtual?node-id=0-1&t=MxYwBQJZPj9aqfz8-1)
 
 ## 🚀 Cómo comenzar
