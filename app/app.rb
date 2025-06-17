@@ -284,4 +284,114 @@ class App < Sinatra::Application
       erb :dashboard
     end
   end
+
+    #Carga de saldo a tarjeta
+  get '/cards/:card_number/charge_balance' do
+    card = Card.find_by(card_number: params[:card_number])
+
+    unless card
+      @error = "No existe la tarjeta."
+      user = current_user
+      return erb :dashboard, locals: {user: user, error: @error}
+    end
+
+    account = Account.find_by(cvu: card.account_cvu)
+
+    erb :charge_balance, locals: {card: card, account: account, error: nil}
+  end
+
+  post '/cards/:card_number/charge_balance' do
+    card = Card.find_by(card_number: params[:card_number])
+
+    unless card
+      @error = "No existe la tarjeta."
+      user = current_user
+      return erb :dashboard, locals: {user: user, error: @error}
+    end
+
+    account = Account.find_by(cvu: card.account_cvu)
+    amount = params[:amount].to_f
+
+    if amount <= 0
+      @error = "Monto invalido para la carga de saldo."
+      return erb :charge_balance, locals: {card: card, account: account, error: @error}
+    end
+
+    financial_entity = User.find_by(dni: "00000001")
+    financial_account = Account.find_by(dni_owner: financial_entity.dni)
+
+    unless financial_account && financial_account.balance >= amount
+      @error = "La entidad financiera no posee saldo suficiente para realizar la carga."
+      return erb :charge_balance, locals: {card: card, account: account, error: @error}
+    end
+
+    account.balance += amount
+    financial_account.balance -= amount
+
+    transaction = Transaction.new(
+      source_cvu: financial_account.cvu,
+      destination_cvu: account.cvu,
+      amount: amount,
+      details: "Carga de saldo a tarjeta #{card.card_number}",
+      status: "Completed"
+    )
+    transaction.save!
+      
+    @success = "Se cargaron $#{amount} correctamente a la tarjeta"
+    user = current_user
+    erb :dashboard, locals: {user: user, success: @success}
+  end
+
+  get '/cards/:card_number/transfer' do
+    card = Card.find_by(card_number: params[:card_number])
+
+    unless card
+      @error = "No existe la tarjeta."
+      user = current_user
+      return erb :dashboard, locals: {user: user, error: @error}
+    end
+    
+    account = card.account
+
+    erb :transfer, locals: {card: card, source_account: account, dest_account: nil, error: nil}
+  end
+
+  post '/cards/:card_number/transfer' do
+    source_card = Card.find_by(card_number: params[:card_number])
+    dest_card = Card.find_by(account_cvu: params[:dest_card_cvu])
+    amount = params[:amount].to_f
+
+    unless source_card && dest_card
+      @error = "Tarjeta de origen o destino no encontrada."
+      return erb :transfer, locals: {card: source_card, source_account: source_card.account, dest_account: nil, error: @error}
+    end
+
+    if amount <= 0
+      @error = "El monto debe ser mayor a 0."
+      return erb :transfer, locals: {card: source_card, source_account: source_card.account, dest_account: dest_card.account, error: @error}
+    end
+
+    source_account = source_card.account
+    dest_account = dest_card.account
+
+    if source_account.balance < amount
+      @error = "Saldo insuficiente para realizar la transferencia."
+      return erb :transfer, locals: { card: source_card, source_account: source_account, dest_account: dest_account, error: @error}
+    end
+
+    begin
+      ActiveRecord::Base.transaction do
+        source_account.update!(balance: source_account.balance - amount)
+        dest_account.update!(balance: dest_account.balance + amount)
+      end
+
+      @success = "Se han transferido $#{amount} a #{dest_account.cvu}. "
+      user = current_user
+      erb :dashboard, locals: {user: user, success: @success}
+
+    rescue => e
+      @error = "Error al realizar la transferencia: #{e.message}"
+      erb :transfer, locals: {card: source_card, source_account: source_account, dest_account: dest_account, error: @error}
+    end
+  end
 end

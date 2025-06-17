@@ -1,0 +1,22 @@
+<h2>Transferencia entre tarjetas</h2>
+
+<p><strong>Tarjeta de origen:</strong> <%= card.card_number %></p>
+<p><strong>Responsable:</strong> <%= card.responsible_name %></p>
+<p><strong>Cuenta CVU:</strong> <%= card.account_cvu %></p>
+<p><strong>Saldo actual:</strong> $<%= source_account.balance %></p>
+
+<% if error %>
+  <p style="color: red;"><%= error %></p>
+<% end %>
+
+<form action="/cards/<%= card.card_number %>/transfer" method="POST">
+  <label for="dest_card_cvu">CVU de destino:</label>
+  <input type="text" name="dest_card_cvu" id="dest_card_cvu" required>
+
+  <label for="amount">Monto a transferir:</label>
+  <input type="number" name="amount" id="amount" step="0.01" required>
+
+  <button type="submit">Transferir</button>
+</form>
+
+<a href="/dashboard">Volver al dashboard</a>

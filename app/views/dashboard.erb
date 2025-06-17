@@ -54,6 +54,15 @@
             <div class="card-menu" id="menu-<%= card.id %>">
               <button type="button" onclick="copyToClipboard('<%= account.alias %>')">Copiar alias</button>
               <button type="button" onclick="copyToClipboard('<%= account.cvu %>')">Copiar CVU</button>
+
+              <form action="/cards/<%= card.card_number %>/charge_balance" method="get">
+                <button type="submit">Cargar saldo</button>
+              </form>
+
+              <form action="/cards/<%= card.card_number %>/transfer" method="get">
+                <button type="submit">Transferir</button>
+              </form>
+
               <form action="/cards/delete" method="post" onsubmit="return confirm('¿Estás seguro de que querés eliminar esta tarjeta?');">
                 <input type="hidden" name="card_number" value="<%= card.card_number %>">
                 <button type="submit">Eliminar tarjeta</button>
