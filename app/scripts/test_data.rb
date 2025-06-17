@@ -10,7 +10,7 @@ ana_account  = Account.create(dni_owner: "87654321",  balance: 10000, status_act
 
 # Crear transacción
 Transaction.create(source_cvu: Account.find_by(dni_owner: "12345678").cvu, destination_cvu: Account.find_by(dni_owner: "87654321").cvu, amount: 2500, details: "Transferencia entre Juan y Ana", status: "completed")
-Transaction.create(source_cvu: Account.find_by(dni_owner: "12333456").cvu, destination_cvu: Account.find_by(dni_owner: "12345678").cvu, amount: 200, details: "Transferencia entre Cavi y Juan")
+#Transaction.create(source_cvu: Account.find_by(dni_owner: "12333456").cvu, destination_cvu: Account.find_by(dni_owner: "12345678").cvu, amount: 200, details: "Transferencia entre Cavi y Juan")
 
 
 juan_card = Card.create( responsible_name: "Juan Pérez", expire_date: Date.new(2026, 12, 31), service: :visa, account_cvu: "12345678", card_number: "3000000000000003")
