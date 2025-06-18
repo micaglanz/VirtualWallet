@@ -1,0 +1,19 @@
+<h2>Confirmar eliminación de cuenta</h2>
+
+<p style="color: red;">Estás por eliminar tu cuenta. Esta acción no se puede deshacer.</p>
+
+<% if @error %>
+    <p style="color: red;"><%= @error %></p>
+<% end %>
+
+<form action="/delete_account" method="post">
+    <div>
+        <label for="current_password">Ingrese su contraseña para confirmar:</label>
+        <input type="password" name="current_password" id="current_password" required>
+    </div>
+
+    <div>
+        <button type="submit" style="background-color: red; color: white;">Eliminar cuenta definitivamente</button>
+        <a href="/settings" style="margin-left: 20px;">Cancelar</a>
+    </div>
+</form>

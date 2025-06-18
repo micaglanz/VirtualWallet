@@ -1,3 +1,9 @@
 # Archivos bases de datos
-/db/*.sqlite3
+app/db/*.sqlite3
+app/db/*.sqlite3-shm
+app/db/*.sqlite3-wal
+app/db/schema.rb
 
+# .gitignore
+development.sqlite3
+schema.rb

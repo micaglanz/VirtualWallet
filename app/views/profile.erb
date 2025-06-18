@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil de Usuario - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <!-- Navbar superior -->
+  <nav class="navbar">
+    <a href="/">
+      <img src="/logo.png" alt="Logo Wallet" class="logo" />
+    </a>
+    <div class="user-menu" onclick="toggleMenu()">
+      <div class="avatar-letter"><%= current_user.name[0].upcase %></div>
+      <div class="dropdown-menu" id="dropdown-menu">
+        <a href="/profile">Perfil</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/settings">Configuracion</a>
+        <form action="/logout" method="POST" style="margin: 0;">
+          <button type="submit">Cerrar sesión</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+
+  <main class="profile-container">
+    <h1>Perfil de Usuario</h1>
+    <div class="profile-info">
+      <p><strong>Nombre:</strong> <%= @user.name %></p>
+      <p><strong>Email:</strong> <%= @user.email %></p>
+      <p><strong>DNI:</strong> <%= @user.dni %></p>
+      <!-- Agregar más campos -->
+    </div>
+  </main>
+
+   <script>
+    function toggleMenu() {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+      }
+    }
+
+    // Cierra el menú si haces click fuera
+    document.addEventListener('click', function(event) {
+      const userMenu = document.querySelector('.user-menu');
+      const menu = document.getElementById('dropdown-menu');
+      if (!userMenu.contains(event.target)) {
+        menu.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

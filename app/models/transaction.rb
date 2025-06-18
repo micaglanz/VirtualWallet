@@ -6,19 +6,20 @@ class Transaction < ActiveRecord::Base
   }
 
   before_create :set_status_pending
-
   after_create :transfer_balance_and_update_status
 
-  # Relaciones y validaciones como antes
-  belongs_to :account, foreign_key: :source_cvu, primary_key: :cvu
+  belongs_to :source_account, class_name: 'Account', foreign_key: :source_cvu, primary_key: :cvu, optional: true
+  belongs_to :destination_account, class_name: 'Account', foreign_key: :destination_cvu, primary_key: :cvu, optional: true
 
-  validates :source_cvu, presence: true
-  validates :destination_cvu, presence: true
+
+  validates :source_cvu, presence: true, on: :create
+  validates :destination_cvu, presence: true, on: :create
+
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :details, presence: true
-  # Ya no validamos status porque es interno
 
   validate :active_account
+  validate :sufficient_balance
 
   def pending?
     status == TRANSACTION_STATUS[:pending]
@@ -39,36 +40,34 @@ class Transaction < ActiveRecord::Base
   end
 
   def active_account
-    unless account&.status_active?
-      errors.add(:account, "debe estar activa para realizar transacciones")
+    if source_account.nil? || !source_account.status_active?
+      errors.add(:source_account, "debe estar activa para realizar transacciones")
+    end
+
+    if destination_account.nil? || !destination_account.status_active?
+      errors.add(:destination_account, "debe estar activa para realizar transacciones")
+    end
+  end
+
+  def sufficient_balance
+    if source_account && source_account.balance < amount
+      errors.add(:amount, "Saldo insuficiente en la cuenta origen")
     end
   end
 
   def transfer_balance_and_update_status
-    source_account = Account.find_by(cvu: source_cvu)
-    target_account = Account.find_by(cvu: destination_cvu)
-
     begin
       ActiveRecord::Base.transaction do
         source_account.balance -= amount
         source_account.save!
 
-        target_account.balance += amount
-        target_account.save!
+        destination_account.balance += amount
+        destination_account.save!
       end
       update_column(:status, TRANSACTION_STATUS[:completed])
     rescue StandardError => e
       update_column(:status, TRANSACTION_STATUS[:failed])
-      # Opcional: loguear el error
-      Rails.logger.error("Falló la transferencia: #{e.message}")
+      logger.error("Falló la transferencia: #{e.message}")
     end
   end
-
-  # Método para actualizar status manualmente en caso de retraso en la transacción
-  public
-  def finalize_transaction(success:)
-    new_status = success ? TRANSACTION_STATUS[:completed] : TRANSACTION_STATUS[:failed]
-    update(status: new_status) if pending?
-  end
-
 end

@@ -1,21 +1,24 @@
 class Account < ActiveRecord::Base
-   
-    self.primary_key = 'cvu'
+  
+ 
+  self.primary_key = 'cvu'
 
-    #Relationships
-    belongs_to :user, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :account
+  #Relationships
+  belongs_to :user, foreign_key: :dni_owner, primary_key: :dni, inverse_of: :accounts
 
-    has_many :transactions_done, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
-    has_many :transactios_recived, class_name: 'Transaction', foreign_key: 'cvu', dependent: :nullify
-    
-    #Validations
-    validates :cvu, presence: true, uniqueness: true
-    validates :password, presence: true
-    validates :alias, presence: true
-    validates :balance, presence: true, numericality: {  greater_than_or_equal_to: 0 }
-    validates :status_active, presence: true, inclusion: { in: [true, false] }
+  has_one :card, foreign_key: 'account_cvu', primary_key: 'cvu', inverse_of: :account, dependent: :destroy
 
-    # Callbacks
+  has_many :transactions_done, class_name: 'Transaction', foreign_key: 'source_cvu', primary_key: 'cvu', dependent: :nullify
+  has_many :transactions_received, class_name: 'Transaction', foreign_key: 'destination_cvu', primary_key: 'cvu', dependent: :nullify
+
+  
+  #Validations
+  validates :cvu, presence: true, uniqueness: true
+  validates :alias, presence: true
+  validates :balance, presence: true, numericality: {  greater_than_or_equal_to: 0 }
+  validates :status_active, presence: true, inclusion: { in: [true, false] }
+
+  # Callbacks
   before_validation :generate_unique_cvu, on: :create
 
   private
@@ -26,6 +29,24 @@ class Account < ActiveRecord::Base
     loop do
       self.cvu = Array.new(22) { rand(0..9) }.join
       break unless Account.exists?(cvu: self.cvu)
+    end
+  end
+
+  before_validation :generate_unique_alias, on: :create
+
+  def generate_unique_alias
+    words = %w[sol luna rio mar monte fuego tierra aire nube gato perro pez ave hoja flor roca viento]
+    loop do
+        generated = [
+          words.sample,
+          words.sample,
+          words.sample
+        ].join('.')
+
+      unless Account.exists?(alias: generated)
+        self.alias = generated
+        break
+      end
     end
   end
 end

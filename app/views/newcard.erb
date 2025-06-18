@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agregar Tarjeta - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1>Agregar nueva tarjeta</h1>
+
+  <% if defined?(errors) && errors.any? %>
+    <div class="error-messages">
+      <h3>Errores al crear la tarjeta:</h3>
+      <ul>
+        <% errors.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="login-box">
+    <form action="/cards" method="post">
+      <label for="card_number">Número de tarjeta</label>
+      <input type="text" name="card[card_number]" id="card_number" required>
+
+      <label for="card_expire_date">Fecha de vencimiento</label>
+      <input type="month" name="card[expire_date]" id="card_expire_date" required>
+
+      <label for="card_service">Marca</label>
+      <select name="card[service]" id="card_service" required>
+        <% Card::SERVICE_VALUES.each do |name, value| %>
+          <option value="<%= value %>"><%= name.to_s.capitalize %></option>
+        <% end %>
+      </select>
+
+      <input type="hidden" name="card[responsible_name]" value="<%= current_user.name %>">
+      <h2></h2>
+      <button type="submit">Crear tarjeta</button>
+    </form>
+
+    <div class="register-link">
+      <p><a href="/dashboard">← Volver</a></p>
+    </div>
+
+  </div>
+</body>
+</html>
+

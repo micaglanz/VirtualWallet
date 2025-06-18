@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bienvenido - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .fade-out {
+      opacity: 0;
+      transition: opacity 1s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar superior -->
+  <nav class="navbar">
+    <a href="/">
+      <img src="/logo.png" alt="Logo Wallet" class="logo" />
+    </a>
+    <div class="user-menu" onclick="toggleMenu()">
+      <span class="user-name"><%= current_user.name %></span>
+      <div class="avatar-letter"><%= current_user.name[0].upcase %></div>
+      <div class="dropdown-menu" id="dropdown-menu">
+        <a href="/profile">Perfil</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/settings">Configuracion</a>
+        <form action="/logout" method="POST" style="margin: 0;">
+          <button type="submit">Cerrar sesión</button>
+        </form>
+      </div>
+    </div>
+
+  </nav>
+
+  <!-- Sidebar lateral izquierdo -->
+  <nav class="sidebar">
+    <h2></h2>
+    <h2>Mis Tarjetas</h2>
+
+    <!-- Listado de tarjetas -->
+    <div class="card-preview">
+      <% current_user.accounts.each do |account| %>
+        <% card = account.card %>
+        <% if card %>
+          <!-- Mostrar la tarjeta -->
+          <p><strong><%= card.service_name.capitalize %></strong></p>
+          <p>**** **** **** <%= card.card_number[-4..] %></p>
+          <p>Vence: <%= card.expire_date.strftime("%m/%Y") %></p>
+          <p>Saldo: $<%= account.balance %></p>
+          <div class="card-actions">
+            <button class="menu-toggle" onclick="toggleCardMenu('<%= card.id %>')">⋮</button>
+
+            <div class="card-menu" id="menu-<%= card.id %>">
+              <button type="button" onclick="copyToClipboard('<%= account.alias %>')">Copiar alias</button>
+              <button type="button" onclick="copyToClipboard('<%= account.cvu %>')">Copiar CVU</button>
+
+              <form action="/cards/<%= card.card_number %>/charge_balance" method="get">
+                <button type="submit">Cargar saldo</button>
+              </form>
+
+              <form action="/cards/<%= card.card_number %>/transfer" method="get">
+                <button type="submit">Transferir</button>
+              </form>
+
+              <form action="/cards/delete" method="post" onsubmit="return confirm('¿Estás seguro de que querés eliminar esta tarjeta?');">
+                <input type="hidden" name="card_number" value="<%= card.card_number %>">
+                <button type="submit">Eliminar tarjeta</button>
+              </form>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+
+      
+    <!-- Botón para agregar tarjeta -->
+    <div class="add-card-box">
+    <form action="/cards/new" method="get">
+      <button type="submit" class="add-card-button">+ Agregar tarjeta</button>
+    </form>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+    <div class="login-box welcome-box" id="welcome-box">
+      <h1>Bienvenido, <%= user.name %>!</h1>
+      <p>Has iniciado sesión correctamente en VirtualWallet.</p>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      const userMenu = document.querySelector('.user-menu');
+      const menu = document.getElementById('dropdown-menu');
+      if (!userMenu.contains(event.target)) {
+        menu.style.display = 'none';
+      }
+    });
+
+    // Fade-out del mensaje de bienvenida
+    window.addEventListener('DOMContentLoaded', () => {
+      const welcomeBox = document.getElementById('welcome-box');
+      setTimeout(() => {
+        welcomeBox.classList.add('fade-out');
+        setTimeout(() => {
+          welcomeBox.remove();
+        }, 1000);
+      }, 1000); // Esperar 1 segundo antes de iniciar el fade
+    });
+
+    function toggleCardMenu(cardId) {
+      const menu = document.getElementById(`menu-${cardId}`);
+      // Alterna visibilidad
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        // Cierra otros menús
+        document.querySelectorAll('.card-menu').forEach(m => m.style.display = 'none');
+        menu.style.display = 'block';
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copiado al portapapeles: " + text);
+      }).catch(err => {
+        alert("Error al copiar: " + err);
+      });
+    }
+
+    // Cierra todos los menús si hacés click fuera
+    document.addEventListener('click', function(event) {
+      if (!event.target.matches('.menu-toggle')) {
+        document.querySelectorAll('.card-menu').forEach(menu => {
+          menu.style.display = 'none';
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
