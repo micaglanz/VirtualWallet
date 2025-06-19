@@ -10,8 +10,8 @@
 <% end %>
 
 <form action="/cards/<%= card.card_number %>/transfer" method="POST">
-  <label for="dest_card_cvu">CVU de destino:</label>
-  <input type="text" name="dest_card_cvu" id="dest_card_cvu" required>
+  <label for="dest_card_cvu_or_alias">CVU o alias de destino:</label>
+  <input type="text" name="dest_card_cvu_or_alias" id="dest_card_cvu_or_alias" required>
 
   <label for="amount">Monto a transferir:</label>
   <input type="number" name="amount" id="amount" step="0.01" required>
