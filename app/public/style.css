@@ -243,6 +243,11 @@ nav.sidebar h2 {
   padding: 80px 20px 20px 20px;
 }
 
+.main-table {
+  margin-left: 280px; 
+  padding: 20px;     
+}
+
 /* ===== PERFIL Y SALDO ===== */
 .profile-container {
   max-width: 600px;
