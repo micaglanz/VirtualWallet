@@ -1,22 +1,40 @@
-<h2>Transferencia entre tarjetas</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transferencia - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Transferencia entre tarjetas</h1>
 
-<p><strong>Tarjeta de origen:</strong> <%= card.card_number %></p>
-<p><strong>Responsable:</strong> <%= card.responsible_name %></p>
-<p><strong>Cuenta CVU:</strong> <%= card.account_cvu %></p>
-<p><strong>Saldo actual:</strong> $<%= source_account.balance %></p>
+  <div class="login-box">
+    <div class="card-info">
+      <p><strong>Tarjeta de origen:</strong> <%= card.card_number %></p>
+      <p><strong>Responsable:</strong> <%= card.responsible_name %></p>
+      <p><strong>Cuenta CVU:</strong> <%= card.account_cvu %></p>
+      <p><strong>Cuenta CVU:</strong> <%= card.account.alias %></p>
+      <p><strong>Saldo actual:</strong> $<%= source_account.balance %></p>
+    </div>
 
-<% if error %>
-  <p style="color: red;"><%= error %></p>
-<% end %>
+    <% if error %>
+      <div class="error" style="color: red;"><%= error %></div>
+    <% end %>
 
-<form action="/cards/<%= card.card_number %>/transfer" method="POST">
-  <label for="dest_card_cvu">CVU de destino:</label>
-  <input type="text" name="dest_card_cvu" id="dest_card_cvu" required>
+    <form action="/cards/<%= card.card_number %>/transfer" method="POST">
+      <label for="dest_card_cvu">CVU de destino</label>
+      <input type="text" name="dest_card_cvu" id="dest_card_cvu" required>
 
-  <label for="amount">Monto a transferir:</label>
-  <input type="number" name="amount" id="amount" step="0.01" required>
+      <label for="amount">Monto a transferir</label>
+      <input type="number" name="amount" id="amount" step="0.01" required>
 
-  <button type="submit">Transferir</button>
-</form>
+      <button type="submit">Transferir</button>
+    </form>
 
-<a href="/dashboard">Volver al dashboard</a>
+    <div class="register-link">
+      <p><a href="/dashboard">Volver al dashboard</a></p>
+    </div>
+  </div>
+</body>
+</html>

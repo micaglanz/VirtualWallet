@@ -63,12 +63,17 @@
                 <button type="submit">Transferir</button>
               </form>
 
+              <form action="/cards/<%= card.card_number %>/history" method="get">
+                <button type="submit">Ver historial</button>
+              </form>
+
               <form action="/cards/delete" method="post" onsubmit="return confirm('¿Estás seguro de que querés eliminar esta tarjeta?');">
                 <input type="hidden" name="card_number" value="<%= card.card_number %>">
                 <button type="submit">Eliminar tarjeta</button>
               </form>
             </div>
           </div>
+
         <% end %>
       <% end %>
     </div>

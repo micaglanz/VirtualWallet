@@ -1,19 +1,31 @@
-<h2>Confirmar eliminación de cuenta</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliminar cuenta - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Confirmar eliminación de cuenta</h1>
 
-<p style="color: red;">Estás por eliminar tu cuenta. Esta acción no se puede deshacer.</p>
+  <div class="login-box">
+    <p class="warning-text">Estás por eliminar tu cuenta. Esta acción no se puede deshacer.</p>
 
-<% if @error %>
-    <p style="color: red;"><%= @error %></p>
-<% end %>
+    <% if @error %>
+      <div class="error"><%= @error %></div>
+    <% end %>
 
-<form action="/delete_account" method="post">
-    <div>
-        <label for="current_password">Ingrese su contraseña para confirmar:</label>
-        <input type="password" name="current_password" id="current_password" required>
+    <form action="/delete_account" method="POST">
+      <label for="current_password">Ingrese su contraseña para confirmar</label>
+      <input type="password" name="current_password" id="current_password" required>
+
+      <button type="submit" class="danger-button">Eliminar cuenta definitivamente</button>
+    </form>
+
+    <div class="register-link">
+      <p><a href="/settings">Cancelar y volver a configuración</a></p>
     </div>
-
-    <div>
-        <button type="submit" style="background-color: red; color: white;">Eliminar cuenta definitivamente</button>
-        <a href="/settings" style="margin-left: 20px;">Cancelar</a>
-    </div>
-</form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de Transacciones</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Historial de Transacciones</h1>
+
+  <div class="login-box-history">
+    <p><strong>Tarjeta:</strong> <%= @card.card_number %></p>
+    <p><strong>Responsable:</strong> <%= @card.responsible_name %></p>
+    <p><strong>CVU:</strong> <%= @account.cvu %></p>
+
+    <% if @transactions.any? %>
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Desde</th>
+            <th>Hacia</th>
+            <th>Monto</th>
+            <th>Detalle</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transactions.each do |tx| %>
+            <tr>
+              <td><%= tx.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+              <td><%= tx.source_cvu %></td>
+              <td><%= tx.destination_cvu %></td>
+              <td>$<%= tx.amount %></td>
+              <td><%= tx.details %></td>
+              <td><%= tx.status.capitalize %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>No hay transacciones registradas para esta tarjeta.</p>
+    <% end %>
+
+    <div class="register-link">
+      <a href="/dashboard">Volver al dashboard</a>
+    </div>
+  </div>
+</body>
+</html>

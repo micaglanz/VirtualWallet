@@ -1,19 +1,35 @@
-<h2>Cargar saldo a la tarjeta</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargar saldo - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Cargar saldo a la tarjeta</h1>
 
-<p><strong>Tarjeta:</strong> <%= card.card_number %></p>
-<p><strong>Responsable:</strong> <%= card.responsible_name %></p>
-<p><strong>Cuenta CVU:</strong> <%= card.account_cvu %></p>
-<p><strong>Saldo actual:</strong> $<%= account.balance %></p>
+  <div class="login-box">
+    <p><strong>Tarjeta:</strong> <%= card.card_number %></p>
+    <p><strong>Responsable:</strong> <%= card.responsible_name %></p>
+    <p><strong>Cuenta CVU:</strong> <%= card.account_cvu %></p>
+    <p><strong>Cuenta CVU:</strong> <%= card.account.alias %></p>
+    <p><strong>Saldo actual:</strong> $<%= account.balance %></p>
 
-<% if error %>
-  <p style="color: red;"><%= error %></p>
-<% end %>
+    <% if error %>
+      <div class="error"><%= error %></div>
+    <% end %>
 
-<form action="/cards/<%= card.card_number %>/charge_balance" method="POST">
-  <label for="amount">Monto a cargar:</label>
-  <input type="number" name="amount" id="amount" step="0.01" required>
+    <form action="/cards/<%= card.card_number %>/charge_balance" method="POST">
+      <label for="amount">Monto a cargar</label>
+      <input type="number" name="amount" id="amount" step="1" required>
 
-  <button type="submit">Cargar saldo</button>
-</form>
+      <button type="submit">Cargar saldo</button>
+    </form>
 
-<a href="/dashboard">Volver al dashboard</a>
+    <div class="register-link">
+      <a href="/dashboard">Volver al dashboard</a>
+    </div>
+  </div>
+</body>
+</html>

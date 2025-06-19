@@ -1,48 +1,49 @@
-<h2>Configuración de la cuenta</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración - VirtualWallet</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Configuración de la cuenta</h1>
 
-<% if @error %>
-    <p style="color: red;"> <%= @error %></p>
-<% elsif @success %>
-    <p style="color: green;"><%= @success %></p>
-<% end %>
+  <div class="login-box">
+    <% if @error %>
+      <div class="error"><%= @error %></div>
+    <% elsif @success %>
+      <div class="success"><%= @success %></div>
+    <% end %>
 
-<form action="/settings" method="post">
-    <div>
-        <label for="name"> Nuevo nombre:</label>
-        <input type="text" name="name" id="name" value="<%= user.name %>" required>
+    <form action="/settings" method="POST">
+      <label for="name">Nuevo nombre</label>
+      <input type="text" name="name" id="name" value="<%= user.name %>" required>
+
+      <label for="current_password">Contraseña actual</label>
+      <input type="password" name="current_password" id="current_password" required>
+
+      <label for="new_password">Nueva contraseña</label>
+      <input type="password" name="new_password" id="new_password">
+
+      <label for="password_confirmation">Confirmar nueva contraseña</label>
+      <input type="password" name="password_confirmation" id="password_confirmation">
+
+      <button type="submit">Guardar cambios</button>
+    </form>
+
+    <hr>
+
+    <h3>Eliminar cuenta</h3>
+    <p class="error">¡Esta acción es irreversible!</p>
+
+    <form action="/confirm_delete" method="GET">
+      <button type="submit" class="danger-button">Eliminar mi cuenta</button>
+    </form>
+
+    <div class="register-link">
+      <a href="/dashboard">Volver a inicio</a>
     </div>
-
-    <div>
-        <label for="current_password">Contraseña actual:</label>
-        <input type="password" name="current_password" id="current_password" required>
-    </div>
-
-    <div>
-        <label for="new_password">Nueva contraseña:</label>
-        <input type="password" name="new_password" id="new_password">
-    </div>
-
-    <div>
-        <label for="password_confirmation">Confirmar nueva contraseña:</label>
-        <input type="password" name="password_confirmation" id="password_confirmation">
-    </div>
-
-    <div>
-        <button type="submit">Guardar cambios</button>
-    </div>
-</form>
-
-<hr>
-<h3>Eliminar cuenta</h3>
-<p style="color: red;">¡Esta acción es irreversible!</p>
-
-<form action="/confirm_delete" method="get">
-    <button type="submit" style="background-color: red; color: white;">
-        Eliminar mi cuenta
-    </button>
-</form>
-        
-
-<br>
-
-<a href="/dashboard">Volver a inicio</a>
+  </div>
+</body>
+</html>

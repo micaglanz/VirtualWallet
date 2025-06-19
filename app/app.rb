@@ -408,4 +408,18 @@ class App < Sinatra::Application
       erb :transfer, locals: {card: source_card, source_account: source_account, dest_account: dest_account, error: @error}
     end
   end
+
+  get '/cards/:card_number/history' do
+    @card = Card.find_by(card_number: params[:card_number])
+
+    if @card.nil?
+      @error = "Tarjeta no encontrada"
+      redirect '/dashboard'
+    else
+      @account = Account.find_by(cvu: @card.account_cvu)
+      @transactions = Transaction.where(source_cvu: @account.cvu).or(Transaction.where(destination_cvu: @account.cvu)).order(created_at: :desc)
+      erb :history
+    end
+  end
+
 end
