@@ -30,8 +30,8 @@
           <% @transactions.each do |tx| %>
             <tr>
               <td><%= tx.created_at.strftime("%d/%m/%Y %H:%M") %></td>
-              <td><%= tx.source_cvu %></td>
-              <td><%= tx.destination_cvu %></td>
+              <td><%= tx.source_account %></td>
+              <td><%= tx.destination_account %></td>
               <td>$<%= tx.amount %></td>
               <td><%= tx.details %></td>
               <td><%= tx.status.capitalize %></td>
