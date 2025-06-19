@@ -10,3 +10,7 @@ gem 'sqlite3'                   # Para la base de datos SQLite
 gem 'logger'                    # Logger integrado
 gem 'rake'                      # Herramienta para automatizar tareas en Ruby
 gem 'bcrypt', '~> 3.1.7'
+group :test, :development do
+  gem 'rspec'
+  gem 'rack-test'
+end

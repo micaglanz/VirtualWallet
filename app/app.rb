@@ -17,8 +17,7 @@ class App < Sinatra::Application
   # Configuración del Logger
   set :logger, Logger.new(STDOUT)
 
-  # Configuración de la base de datos con ActiveRecord
-  set :database, { adapter: "sqlite3", database: "db/development.sqlite3" }
+  set :database_file, File.expand_path('../config/database.yml', __FILE__)
 
   configure :development do
     enable :logging
@@ -147,10 +146,7 @@ class App < Sinatra::Application
     if session[:user_dni]
       user = User.find_by(dni: session[:user_dni])
       if user
-        account = user.accounts.first
-        transactions = Transaction.where("source_cvu = ? OR destination_cvu = ?", account.cvu, account.cvu)
-      
-        erb :dashboard, locals: { user: user, account: account, transactions: transactions }
+        erb :dashboard, locals: { user: user }
       else
         halt 401, "Usuario no encontrado"
       end
