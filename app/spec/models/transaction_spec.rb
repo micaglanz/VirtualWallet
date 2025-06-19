@@ -22,8 +22,8 @@ RSpec.describe Transaction do
     date_of_birth: "1990-01-01"
   )
 
-  let(:source_cvu) { Account.create!(dni_owner: roberto.dni, balance: 100, status_active: true) }
-  let(:destination_cvu) { Account.create!(dni_owner: florencia.dni, balance: 50, status_active: true) }
+  let(:source_cvu) { Account.create(dni_owner: roberto.dni, balance: 100, status_active: true) }
+  let(:destination_cvu) { Account.create(dni_owner: florencia.dni, balance: 50, status_active: true) }
 
   context 'validations' do
     it 'no permite crear transacción si no hay saldo suficiente' do

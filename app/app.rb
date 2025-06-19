@@ -146,7 +146,10 @@ class App < Sinatra::Application
     if session[:user_dni]
       user = User.find_by(dni: session[:user_dni])
       if user
-        erb :dashboard, locals: { user: user }
+        account = user.accounts.first
+        transactions = Transaction.where("source_cvu = ? OR destination_cvu = ?", account.cvu, account.cvu)
+      
+        erb :dashboard, locals: { user: user, account: account, transactions: transactions }
       else
         halt 401, "Usuario no encontrado"
       end
