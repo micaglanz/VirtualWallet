@@ -96,6 +96,41 @@
     </div>
   </div>
 
+ <div class="main-table" id="history-table">
+    <h2>Historial de Transacciones de tu Cuenta</h2>
+
+    <p><strong>CVU:</strong> <%= account.cvu %></p>
+
+    <% if transactions.any? %>
+      <table class="transactions-table">
+        <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Desde</th>
+          <th>Hacia</th>
+          <th>Monto</th>
+          <th>Detalle</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+     <tbody>
+      <% transactions.each do |tx| %>
+        <tr>
+          <td><%= tx.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+          <td><%= tx.source_cvu %></td>
+          <td><%= tx.destination_cvu %></td>
+          <td>$<%= tx.amount %></td>
+          <td><%= tx.details %></td>
+          <td><%= tx.status.capitalize %></td>
+        </tr>
+      <% end %>
+      </tbody>
+     </table>
+   <% else %>
+     <p>No hay transacciones asociadas a este CVU.</p>
+   <% end %>
+ </div>
+
   <script>
     function toggleMenu() {
       const menu = document.getElementById('dropdown-menu');
