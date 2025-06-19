@@ -10,6 +10,16 @@
       opacity: 0;
       transition: opacity 1s ease-out;
     }
+    .fade-in {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease-in;
+    }
+
+    .fade-in.show {
+      opacity: 1;
+      visibility: visible;
+    }
   </style>
 </head>
 <body>
@@ -150,14 +160,32 @@
     });
 
     // Fade-out del mensaje de bienvenida
+    document.addEventListener('click', function(event) {
+      const userMenu = document.querySelector('.user-menu');
+      const menu = document.getElementById('dropdown-menu');
+      if (!userMenu.contains(event.target)) {
+        menu.style.display = 'none';
+      }
+    });
+
+    // Fade-out del mensaje de bienvenida
     window.addEventListener('DOMContentLoaded', () => {
       const welcomeBox = document.getElementById('welcome-box');
+      const historyTable = document.getElementById('history-table');
+
+      // Ocultar tabla al inicio (queda invisible gracias a CSS .fade-in)
+      historyTable.classList.add('fade-in');
+
+      // Fade-out de welcome-box
       setTimeout(() => {
-        welcomeBox.classList.add('fade-out');
-        setTimeout(() => {
-          welcomeBox.remove();
+      welcomeBox.classList.add('fade-out');
+
+      // Después del fade-out (1 seg), mostrar la tabla con fade-in
+      setTimeout(() => {
+        welcomeBox.remove();
+        historyTable.classList.add('show'); // activa fade-in y visibility: visible
         }, 1000);
-      }, 1000); // Esperar 1 segundo antes de iniciar el fade
+       }, 1000);
     });
 
     function toggleCardMenu(cardId) {
