@@ -14,7 +14,7 @@
       <img src="/logo.png" alt="Logo Wallet" class="logo" />
     </a>
     <div class="user-menu" onclick="toggleMenu()">
-      <img src="/user.png" alt="Usuario" class="user-avatar" />
+      <div class="avatar-letter"><%= current_user.name[0].upcase %></div>
       <div class="dropdown-menu" id="dropdown-menu">
         <a href="/profile">Perfil</a>
         <a href="/dashboard">Dashboard</a>
