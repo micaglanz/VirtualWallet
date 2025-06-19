@@ -353,7 +353,7 @@ class App < Sinatra::Application
       
     @success = "Se cargaron $#{amount} correctamente a la tarjeta"
     user = current_user
-    erb :dashboard, locals: {user: user, success: @success}
+    redirect '/dashboard'
   end
 
   get '/cards/:card_number/transfer' do
@@ -371,42 +371,63 @@ class App < Sinatra::Application
   end
 
   post '/cards/:card_number/transfer' do
-    source_card = Card.find_by(card_number: params[:card_number])
-    dest_card = Card.find_by(account_cvu: params[:dest_card_cvu])
-    amount = params[:amount].to_f
-
-    unless source_card && dest_card
-      @error = "Tarjeta de origen o destino no encontrada."
-      return erb :transfer, locals: {card: source_card, source_account: source_card.account, dest_account: nil, error: @error}
-    end
-
-    if amount <= 0
-      @error = "El monto debe ser mayor a 0."
-      return erb :transfer, locals: {card: source_card, source_account: source_card.account, dest_account: dest_card.account, error: @error}
-    end
-
-    source_account = source_card.account
-    dest_account = dest_card.account
-
-    if source_account.balance < amount
-      @error = "Saldo insuficiente para realizar la transferencia."
-      return erb :transfer, locals: { card: source_card, source_account: source_account, dest_account: dest_account, error: @error}
-    end
-
     begin
-      ActiveRecord::Base.transaction do
-        source_account.update!(balance: source_account.balance - amount)
-        dest_account.update!(balance: dest_account.balance + amount)
+      source_card = Card.find_by(card_number: params[:card_number])
+      dest_card = Card.joins(:account).where(
+        "accounts.cvu = :value OR accounts.alias = :value",
+        value: params[:dest_card_cvu_or_alias]
+      ).first
+      amount = params[:amount].to_f
+
+      unless source_card && dest_card
+        @error = "Tarjeta de origen o destino no encontrada."
+        return erb :transfer, locals: {card: source_card, source_account: source_card.account, dest_account: nil, error: @error}
       end
+
+      if amount <= 0
+        @error = "El monto debe ser mayor a 0."
+        return erb :transfer, locals: {card: source_card, source_account: source_card.account, dest_account: dest_card.account, error: @error}
+      end
+
+      source_account = source_card.account
+      dest_account = dest_card.account
+
+      if source_account.balance < amount
+        @error = "Saldo insuficiente para realizar la transferencia."
+        return erb :transfer, locals: { card: source_card, source_account: source_account, dest_account: dest_account, error: @error}
+      end
+
+      #Transferencia de saldo
+      source_account.balance -= amount
+      dest_account.balance += amount
+    
+      #Registro de la transferencia
+      Transaction.create!( 
+        source_cvu: source_account&.cvu,
+        destination_cvu: dest_account&.cvu,
+        details: "Transferencia de tarjeta #{source_card.card_number} a #{dest_card.card_number}",
+        amount: amount,
+        status: "completed"
+      )
 
       @success = "Se han transferido $#{amount} a #{dest_account.cvu}. "
       user = current_user
-      erb :dashboard, locals: {user: user, success: @success}
+      redirect '/dashboard'
 
     rescue => e
+      #Si falla la transacción...
+      Transaction.create(
+        source_cvu: source_account.cvu,
+        destination_cvu: dest_account.cvu,
+        details: "Transferencia de tarjeta #{source_card.card_number} a #{dest_card.card_number}",
+        amount: amount,
+        status: "failed"
+      ) rescue nil
+
       @error = "Error al realizar la transferencia: #{e.message}"
       erb :transfer, locals: {card: source_card, source_account: source_account, dest_account: dest_account, error: @error}
     end
+
   end
 
   get '/cards/:card_number/history' do
