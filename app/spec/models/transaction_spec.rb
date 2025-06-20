@@ -60,4 +60,48 @@ RSpec.describe Transaction do
       expect(destination_cvu.reload.balance).to eq(90)
     end
   end
+
+  context 'usuario' do
+    it 'elimina el usuario junto con sus cuentas y tarjetas asociadas' do
+      user = User.create(
+        dni: "55555555",
+        name: "Test",
+        surname: "User",
+        address: "Calle Test 123",
+        email: "testuser@example.com",
+        password: "password123",
+        password_confirmation: "password123",
+        date_of_birth: "1990-01-01"
+      )
+
+      # Creamos una cuenta asociada al usuario
+      account = Account.create(
+        dni_owner: user.dni,
+        balance: 100,
+        status_active: true
+      )
+
+      # Creamos una tarjeta asociada a la cuenta
+      card = Card.create(
+        responsible_name: user.name,
+        account_cvu: account.cvu,
+        expire_date: Date.today.next_year(5),
+        service: 'visa'
+      )
+
+      # Comprobamos que existen antes de la eliminación
+      expect(User.exists?(user.dni)).to be true
+      expect(Account.exists?(account.cvu)).to be true
+      expect(Card.exists?(card.id)).to be true
+
+      # Eliminamos el usuario
+      user.destroy
+
+      # Comprobamos que también se eliminaron las cuentas y tarjetas asociadas
+      expect(User.exists?(user.dni)).to be false
+      expect(Account.exists?(account.cvu)).to be false
+      expect(Card.exists?(card.id)).to be false
+    end
+  end
+
 end
