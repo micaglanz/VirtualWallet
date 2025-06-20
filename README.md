@@ -1,15 +1,26 @@
 <h1 id="title">VirtualWallet [Wallee]</h1>
 
+# 💳 VirtualWallet [Wallee]
+
+Una billetera virtual desarrollada en Ruby con Sinatra y ActiveRecord. 
+Permite a los usuarios gestionar cuentas, tarjetas, transacciones y más. 
+
 ## 📄 Documentación
 
 - 📘 [Diagrama de clase UML]
     [V1](UML-VirtualWallet.png)
     [V2](SVGWallet_V2.jpg)
+
 - 🎨 [Figma - Design Preview](https://www.figma.com/design/2Qq6lUiSN2v3rzlVPjB7bj/Billetera-Virtual?node-id=0-1&t=MxYwBQJZPj9aqfz8-1)
 
 ## 🚀 Cómo comenzar
 
 - Sigue estos pasos para ejecutar el proyecto localmente.
+
+## ⚙️ Pre-Requisitos
+
+- [Docker](https://www.docker.com/) y Docker Compose instalados
+- (Opcional) Git instalado
 
 ### 1. Clonar el repositorio
 
@@ -58,4 +69,9 @@ docker compose exec app bundle exec rake db:reset
 
 ```bash
 docker compose exec app bundle exec irb -I. -r app.rb
+```
+### 5. Comando para ejecutar TEST
+
+```bash
+docker compose exec app bundle exec rspec
 ```
